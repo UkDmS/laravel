@@ -53,6 +53,8 @@ return [
     */
 
     'url' => env('APP_URL', 'http://laravel.goodweb.me/blog/'),
+    'public' => env('APP_PUBLIC', 'http://laravel.goodweb.me/blog/public/'),
+    'img' => env('APP_IMG', 'http://laravel.goodweb.me/blog/public/images/'),
 
     /*
     |--------------------------------------------------------------------------

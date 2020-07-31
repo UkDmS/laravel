@@ -13,10 +13,6 @@ class TagsPosts extends Migration
      */
     public function up()
     {
-        //
-        if (Schema::hasTable('tagsPosts')) {
-            Schema::drop('tagsPosts');
-        }
         Schema::create('tagsPosts', function($table){
             $table->increments('id');
             $table -> integer('posts_id') -> unsigned();
@@ -37,5 +33,7 @@ class TagsPosts extends Migration
     public function down()
     {
         //
+
+
     }
 }

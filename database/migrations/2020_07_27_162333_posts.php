@@ -14,16 +14,13 @@ class Posts extends Migration
     public function up()
     {
         //
-        if (Schema::hasTable('posts')) {
-            Schema::drop('posts');
-        }
+        Schema::dropIfExists('posts');
         Schema::create('posts', function($table){
             $table->increments('id');
             $table->string('title')->unique();
             $table->text('body');
             $table->string('img');
-            $table->string('tags');
-            $table->timestamp('created_at');
+            $table->timestamps();
         });
     }
 

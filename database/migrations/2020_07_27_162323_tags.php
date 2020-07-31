@@ -11,12 +11,11 @@ class Tags extends Migration
      *
      * @return void
      */
+
     public function up()
     {
-        //
-        if (Schema::hasTable('tags')) {
-            Schema::drop('tags');
-        }
+        Schema::dropIfExists('tagsPosts');
+        Schema::dropIfExists('tags');
         Schema::create('tags', function($table){
             $table->increments('id');
             $table->string('tag')->unique();
@@ -31,5 +30,7 @@ class Tags extends Migration
     public function down()
     {
         //
+        //Schema::drop('tags');
+
     }
 }

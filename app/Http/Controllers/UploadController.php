@@ -7,14 +7,10 @@ use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Storage;
+
 class UploadController extends Controller
 {
-    //
-    public function imageUpload()
-    {
-        return view('add');
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -26,22 +22,28 @@ class UploadController extends Controller
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $imageName = time().'.'.$request->image->extension();
+        $imageName =  time().'.'.$request->image->extension();
 
         $request->image->move(public_path('images'), $imageName);
-         $this->validate($request, [
-    'title' => 'required'
-    ]);
-    echo $request->title;
-    DB::table('posts')->insert(
-  ['title' => $request->title,
-  'body' => $request->description,
-  'img'=>$imageName,
-  'tags'=>$request->tags,
-  'created_at'=>date("Y-m-d H:i:s")
-  ]
-);
-       // return back() ;
-
+        $this->validate($request, [
+            'title' => 'required'
+        ]);
+        $idPost = DB::table('posts')->insertGetId(
+                    ['title' => $request->title,
+                    'body' => $request->description,
+                    'img'=>$imageName,
+                    'created_at'=>date("Y-m-d H:i:s"),
+                    'updated_at'=>date("Y-m-d H:i:s")
+                    ]
+        );
+        foreach($request->options as $item){
+            DB::table('tagsPosts')->insert(
+                [
+                    'posts_id' => $idPost,
+                    'tags_id' => $item
+                ]
+            );
+        }
+        return redirect()->route('list');
     }
 }

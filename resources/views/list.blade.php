@@ -24,9 +24,22 @@
                     <td> {{ $l->title }}</td>
                     <td> {{ $l->body }}</td>
                     <td> <img class="preview" src="{{config('app.url')}}public/images/{{ $l->img}}"></td>
-                    <td> {{ $l->tags }}</td>
+                    <td> </td>
                     <td> {{ $l->created_at }}</td>
-                    <td> {{ $l->tags }}</td>
+                    <td> {{ $l->updated_at}}</td>
+                    <td>
+                        <form action="{{route('postDelete',['id' => $l->id])}}" method="post">
+                            {{csrf_field()}}
+                            {{method_field('DELETE')}}
+                            <button type="submit" class="btn btn-primary">Удалить</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="{{route('postEdit',['id' => $l->id])}}" method="post">
+                            {{csrf_field()}}
+                            <button type="submit" class="btn btn-primary">Редактировать</button>
+                        </form>
+                    </td>
                 </tr>
             @endforeach
         </tbody>

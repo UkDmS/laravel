@@ -14,12 +14,11 @@
 Route::get('/', function () {
     return view('welcome');
 });
-/*Route::get('/list', function () {
-    return view('list');
-});*/
-
-Route::get('list', 'ListController@printList');
-Route::get('add', 'UploadController@imageUpload');
-
-Route::any('add/submit', 'UploadController@imageUploadPost');
+Route::get('list', 'ListController@printList')->name('list');
+Route::get('add', 'AddController@show');
+Route::post('add/submit', 'UploadController@imageUploadPost')->name('savePost');
+Route::delete('postDelete/{id}', 'ListController@del')->name('postDelete');
+Route::post('postEdit/{id}', 'ListController@editPost')->name('postEdit');
+Route::post('saveChange/{id}', 'ListController@saveChange')->name('saveChange');
+Route::post('saveTag', 'AddController@saveTag');
  //

@@ -67,13 +67,62 @@
             .m-b-md {
                 margin-bottom: 30px;
             }
+            #description{
+                margin-bottom: 20px;
+            }
+
+            .mselect{
+                display: flex;
+                flex-direction: row;
+                align-items: baseline;
+            }
+            #options{
+                display: none;
+            }
+
+            .mselect label{
+                margin-bottom:5px;
+                margin-right: 10px;
+            }
+            .mselect label input[type=checkbox]{
+                display: none;
+            }
+            .check {
+                padding: 2px 6px;
+                border-radius: 10px;
+                background: #fbfaf9;
+            }
+            #add__tag{
+                display: block;
+                color: #b2a9e0;
+                font-weight: 600;
+                text-decoration: underline;
+                cursor: pointer;
+            }
+            #wrapper__tag{
+                display: none;
+            }
+            #save__tag{
+                float: right;
+            }
+            #close__tag{
+                float: right;
+            }
+            .img__post{
+                width:200px;
+                height:235px;
+                display: block;
+                margin: auto;
+            }
+
         </style>
+
     </head>
     <nav>
         <div class="links">
             <a href="{{ url('add') }}">Добавить</a>
             <a href="{{ url('list') }}">Просмотреть</a>
-            <a href="https://github.com/laravel/laravel">GitHub</a>
+            <a href="https://github.com/UkDmS/laravel" target="_blank">GitHub</a>
         </div>
     </nav>
     <body>
@@ -91,5 +140,97 @@
             </div>
         </div>
         </div>
+        <script>
+            let newTag = document.querySelector("#new__tag");
+            let addTag = document.querySelector("#add__tag");
+            let wrapperTag = document.querySelector("#wrapper__tag");
+            let closeTag = document.querySelector("#close__tag");
+            let saveTag = document.querySelector("#save__tag");
+            choiceTag();
+
+
+            function choiceTag(){
+                let colors = ['red',
+                            'green',
+                            'blue',
+                            'pink',
+                            'yellow',
+                            "Salmon",
+                            "DarkSalmon",
+                            "LightSalmon",
+                            "Crimson",
+                            "Red",
+                            "FireBrick",
+                            "DarkRed",
+                            "Pink",
+                            "LightPink",
+                            "HotPink",
+                            "DeepPink",
+                            "MediumVioletRed",
+                            "PaleVioletRed",
+                            "LightSalmon",
+                            "Coral",
+                            "Tomato",
+                            "OrangeRed",
+                            "DarkOrange",
+                            "Orange"];
+                let randomColorIndex;
+                let mLabel = document.querySelectorAll(".mselect label");
+                for(let i=0; i<mLabel.length; i++){
+                    let child = mLabel[i].querySelector('input');
+                    console.log(child)
+                    child.addEventListener("click", function(){
+                        let option = document.querySelector("#options option[data-name='"+child.value+"']");
+
+                        let parent = child.parentNode;
+                        parent.classList.toggle("check");
+                        if(parent.classList.contains("check")) {
+                            option.setAttribute('selected', 'selected');
+                            randomColorIndex = getRandom(0,colors.length);
+                            parent.style.border = '2px solid '+colors[randomColorIndex];
+                        }
+                        else {
+                           option.removeAttribute("selected");
+                           parent.removeAttribute("style");
+                        }
+                    })
+                }
+            }
+            function getRandom(min,max){
+                return Math.floor(Math.random() * (max-min) + min)
+            }
+
+            addTag.addEventListener("click", function(){
+                wrapperTag.style.display = "block";
+            });
+
+            closeTag.addEventListener("click", function(){
+                newTag.value = "";
+                wrapperTag.removeAttribute("style");
+            });
+
+            saveTag.addEventListener("click", function(){
+                var xhr = new XMLHttpRequest();
+                var input = encodeURIComponent(newTag.value) ;
+                xhr.open('POST',"{{config('app.public')}}saveTag");
+                xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+                xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector("input[name=_token]").value);
+                xhr.onreadystatechange = () => {
+                    if(xhr.readyState === 4 && xhr.status === 200){
+                        document.querySelector('#options').insertAdjacentHTML("beforeEnd", "<option value='"+xhr.responseText+"' data-name='"+newTag.value+"'>"+newTag.value+"</option>");
+                        document.querySelector('.mselect').insertAdjacentHTML("beforeEnd", "<label><input type='checkbox' value='"+newTag.value+"'>"+newTag.value+"</label>");
+                        newTag.value = "";
+                        wrapperTag.removeAttribute("style");
+                        choiceTag();
+                        console.log(xhr.responseText);
+                        console.log("sdfs");
+                    }
+                }
+                xhr.send('tag=' + input)
+                console.log(newTag.value)
+
+            });
+
+        </script>
     </body>
 </html>
