@@ -3,6 +3,7 @@
 
 
 @section('content')
+
     <table class="table">
         <thead>
             <tr>
@@ -24,7 +25,16 @@
                     <td> {{ $l->title }}</td>
                     <td> {{ $l->body }}</td>
                     <td> <img class="preview" src="{{config('app.url')}}public/images/{{ $l->img}}"></td>
-                    <td> </td>
+                    <td>
+                        @foreach ($tagsPosts as $item)
+
+                        @if ( $item->posts_id === $l->id)
+                            {{ $item->tag }}
+
+                        @endif
+
+                        @endforeach
+                    </td>
                     <td> {{ $l->created_at }}</td>
                     <td> {{ $l->updated_at}}</td>
                     <td>
